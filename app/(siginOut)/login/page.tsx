@@ -1,8 +1,17 @@
 import Image from "next/image";
 import { Button } from "@/app/_components/ui/button";
 import { LogInIcon } from "lucide-react";
+import { SignUpButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-const LoginPage = () => {
+const LoginPage = async () => {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/");
+  }
+
   return (
     <div className="grid h-full grid-cols-2">
       <div className="flex h-full flex-col items-center justify-center p-8">
@@ -13,6 +22,8 @@ const LoginPage = () => {
             alt="Finance AI"
             width={173}
             height={39}
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw"
           />
 
           <h1 className="mb-3 text-4xl font-bold">Bem-vindo</h1>
@@ -22,10 +33,12 @@ const LoginPage = () => {
             personalizados, facilitando o controle do seu orçamento.
           </p>
 
-          <Button variant="outline" className="w-full">
-            <LogInIcon className="mr-2" />
-            Fazer login ou criar conta
-          </Button>
+          <SignUpButton>
+            <Button variant="outline" className="w-full">
+              <LogInIcon className="mr-2" />
+              Fazer login ou criar conta
+            </Button>
+          </SignUpButton>
         </div>
       </div>
 
